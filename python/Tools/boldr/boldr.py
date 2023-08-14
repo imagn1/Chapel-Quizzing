@@ -3,8 +3,18 @@
 Created on Tue Aug  2 12:57:05 2022
 File handling, word counting, writing, dict creation and organization
 
-This is rev2, which is way more efficient
-@author: u619207
+Designed to identify all unique words in a given textual set, and then
+insert characters to identify the unique words. It then stores that set somewhere
+to be specified.
+
+@author: Isaiah Magnuson
+
+Changelog:
+    -rev 2:
+        made much more efficient
+    -rev 3: WIP
+        made modular, using functions
+        allowed text location to be supplied via command line arguments
 """
 
 # IMPORTS:
