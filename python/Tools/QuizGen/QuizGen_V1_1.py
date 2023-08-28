@@ -20,6 +20,7 @@ import csv
 import random
 import os
 import sys
+import yaml
 
 # Constants ==================================================================
 accepted_types = ["QT","FTV","INT","MA"]
@@ -27,6 +28,25 @@ default_type_dist = {"QT":(1,2), "FTV":(1,2), "MA":(1,2)}
 default_num_questions = 20
 default_num_backup = 5
 default_ratio_key = 0.5
+
+# Configurations +============================================================
+absolute_path = os.path.dirname(__file__)
+
+configs_directory = os.path.join(absolute_path, "../../../configs/")
+quizgen_config_path = os.path.join(config_path, "quizgen_config.yml")
+quiz_definition_path = os.path.join(config_path, "quiz_definition.yml")
+question_types_path = os.path.join(config_path, "question_types.yml")
+
+with open(quizgen_config_path, 'r') as file:
+    config = yaml.safe_load(file)
+
+with open(quiz_definition_path, 'r') as file:
+    quiz_definition = yaml.safe_load(file)
+    
+with open(question_types_path, 'r') as file:
+    question_types = yaml.safe_load(file)
+
+
 # Class definitions ==========================================================
 class Question:
     
@@ -297,6 +317,7 @@ def main():
     pool, key_pool = gen_pools(q_lib, key_verses, "Hebrews")
         
     # set params
+    quizgen_config = 
     print("How many quizzes to generate?")
     num_quizzes = input("(Leave blank for 1) INT: ")
     if not num_quizzes:
