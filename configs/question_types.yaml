@@ -15,6 +15,7 @@ Question Types:
         name: "Interrogative"
         abbrv: "INT"
         is_key_only: False
+        is_default: True
         description: "Question uses a key word in first five words, and contains nothing except text and one simple interrogative (i.e. who, what, when, where, why, how) with 'what' being commonly used as a fill-in-the-blank."
         
     MA:
