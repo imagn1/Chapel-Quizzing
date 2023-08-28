@@ -1,7 +1,0 @@
-Paths:
-    QuestionsCSV: "path goes here"
-    KeyVersesCSV: "path goes here"
-    ResultsDirectory: "path goes here"
-NumberToGenerate: 1
-# Will append ## to title
-Titles: "title goes here"
