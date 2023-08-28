@@ -1,0 +1,25 @@
+Question Types:
+    QT:
+        name: "Quote"
+        abbrv: "QT"
+        is_key_only: True
+        description: "Question is a key verse reference, answer is the text of that verse."
+    
+    FTV:
+        name: "Finish the Verse"
+        abbrv: "FTV"
+        is_key_only: True
+        description: "Question is the first five words of a verse, answer is the entire verse (if interrupted, remainder of question must be given.)"
+    
+    INT:
+        name: "Interrogative"
+        abbrv: "INT"
+        is_key_only: False
+        is_default: True
+        description: "Question uses a key word in first five words, and contains nothing except text and one simple interrogative (i.e. who, what, when, where, why, how) with 'what' being commonly used as a fill-in-the-blank."
+        
+    MA:
+        name: "Multiple Answer"
+        abbrv: "MA"
+        is_key_only: False
+        description: "Like INT, but expects some sort of list or pair of answers"
