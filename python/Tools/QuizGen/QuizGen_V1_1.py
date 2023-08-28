@@ -32,7 +32,7 @@ default_ratio_key = 0.5
 # Configurations +============================================================
 absolute_path = os.path.dirname(__file__)
 
-configs_directory = os.path.join(absolute_path, "../../../configs/")
+config_path = os.path.join(absolute_path, "../../../configs/")
 quizgen_config_path = os.path.join(config_path, "quizgen_config.yml")
 quiz_definition_path = os.path.join(config_path, "quiz_definition.yml")
 question_types_path = os.path.join(config_path, "question_types.yml")
