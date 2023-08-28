@@ -65,6 +65,11 @@ class Quiz:
       
     global debug
     
+    default_num_questions = quiz_definition["Quiz"]["Questions"]["Number"]
+    default_ratio_key = quiz_definition["Quiz"]["Questions"]["RatioKey"]
+    default_num_backup = quiz_definition["Quiz"]["Backups"]["Number"]
+    default_type_dist = quiz_definition["Quiz"]["Questions"]["Distribution"]
+    
     def __init__(self, num_questions=default_num_questions, ratio_key=default_ratio_key, 
                  num_backup=default_num_backup, ratio_types=default_type_dist):
         self.num_questions = num_questions
@@ -317,7 +322,6 @@ def main():
     pool, key_pool = gen_pools(q_lib, key_verses, "Hebrews")
         
     # set params
-    quizgen_config = 
     print("How many quizzes to generate?")
     num_quizzes = input("(Leave blank for 1) INT: ")
     if not num_quizzes:
