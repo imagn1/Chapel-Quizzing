@@ -70,12 +70,11 @@ class Quiz:
     default_num_backup = quiz_definition["Quiz"]["Backups"]["Number"]
     default_type_dist = quiz_definition["Quiz"]["Questions"]["Distribution"]
     
-    def __init__(self, num_questions=default_num_questions, ratio_key=default_ratio_key, 
-                 num_backup=default_num_backup, ratio_types=default_type_dist):
-        self.num_questions = num_questions
-        self.ratio_key = ratio_key
-        self.num_backup = num_backup
-        self.ratio_types = ratio_types
+    def __init__(self):
+        num_questions = default_num_questions
+        ratio_key = default_ratio_key
+        num_backup = default_num_backup
+        ratio_types = default_type_dist
         
         question_set = []
         backup_question_set = []
@@ -152,38 +151,38 @@ class Quiz:
         return buildup
 
 # Function definitions =======================================================
-def readQuestionLibrary(lib_path):
+def readQuestionLibrary():
     """
-    This function reads in the CSV of questions, and turns it into an array
-
-    Parameters
-    ----------
-    lib_path : path to csv_file
+    This function reads in the CSV of questions, and turns it into an array.
+    Relies on the path definition in quizgen_config.yml
 
     Returns
     -------
     q_lib, an array of the data of the CSV
     """
     q_lib = []
+    lib_path = config["Paths"]["QuestionsCSV"]
+    assert os.path.exists(lib_path), "File not found at, " + str(lib_path)
     with open(lib_path, mode='r', encoding='utf-8') as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         for row in csv_reader:
             q_lib.append(row)
     return q_lib
 
-def readKeyList(key_path):
+def readKeyList():
     """
     This function reads in a CSV file of key verses, and makes a list of them
-    Parameters
-    ----------
-    key_path : path to CSV
-
+    Relies on the oath definition in quizgen_config.yml
+    
     Returns
+    
     -------
     key_verses : list of references
 
     """
     key_lib = []
+    key_path = config["Paths"]["KeyVersesCSV"]
+    assert os.path.exists(key_path), "Key verses file not found at, " + str(key_path)
     with open(key_path, mode = 'r', encoding='utf-8') as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         for row in csv_reader:
@@ -298,18 +297,12 @@ def main():
     else:
         debug = False
 
-    print("Please provide the path to the .CSV file containing quiz questions")
-    csv_path = input("Path: ")
-    assert os.path.exists(csv_path), "File not found at, " + str(csv_path)
-    q_lib = readQuestionLibrary(csv_path)
+    q_lib = readQuestionLibrary()
     print("File read succesfully")
-    print("Please enter the path to the CSV list of key verses")
-    key_path = input("Path: ")
-    assert os.path.exists(key_path), "File not found at, " + str(key_path)
-    key_verses = readKeyList(key_path)
+    key_verses = readKeyList()
     print("File read succesfully")
     print("Where to place results?")
-    result_path = input("(Leave blank for console-only) Path: ")
+    result_path = config["Paths"]["ResultsDirectory"]
     # only Hebrews implemented so far
     global pool
     global key_pool
@@ -322,52 +315,16 @@ def main():
     pool, key_pool = gen_pools(q_lib, key_verses, "Hebrews")
         
     # set params
-    print("How many quizzes to generate?")
-    num_quizzes = input("(Leave blank for 1) INT: ")
+    num_quizzes = config["NumberToGenerate"]
     if not num_quizzes:
         num_quizzes = 1
-    else:
-        num_quizzes = int(num_quizzes)
     
-    print("# of questions per quiz?")
-    num_questions = input(f"(Leave blank for default {default_num_questions}) INT: ")
-    if not num_questions:
-        num_questions = default_num_questions
-    else:
-        num_questions = int(num_questions)
-        
-    print("Edit question type distribution?")
-    if input("y/n: ").lower() == 'y':
-        type_dist = {}
-        for key, value in default_type_dist.items():
-            print(f"Type {key}, currently {value}")
-            lower = int(input("MIN: "))
-            upper = int(input("MAX: "))
-            type_dist[key] = (lower, upper)
-    else:
-        type_dist = default_type_dist
-    
-    print("# of backup questions per quiz?")
-    num_backup = input(f"(Leave blank for default {default_num_backup}) INT: ")
-    if not num_backup:
-        num_backup = default_num_backup
-    else:
-        num_backup = int(num_backup)
-    
-    print("Key verse percentage?")
-    ratio_key = input(f"(Leave blank for default {default_ratio_key}) 0.0-1.0: ")
-    if not ratio_key:
-        ratio_key = default_ratio_key
-    else:
-        ratio_key = float(ratio_key)
-    
-    print("Finally, enter a title for your quizzes")
-    desired_title = input("Will be in format TITLE ##")
+    desired_title = config["Titles"]
     
     # crunch numbers
     quizzes = []
     for i in range(num_quizzes):
-        quizzes.append(Quiz(num_questions,ratio_key,num_backup,type_dist))
+        quizzes.append(Quiz())
     
     # spit out results
     for index, quiz in enumerate(quizzes):
