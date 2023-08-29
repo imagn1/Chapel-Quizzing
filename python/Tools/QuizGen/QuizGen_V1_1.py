@@ -301,9 +301,8 @@ def main():
     print("File read succesfully")
     key_verses = readKeyList()
     print("File read succesfully")
-    print("Where to place results?")
     result_path = config["Paths"]["ResultsDirectory"]
-    # only Hebrews implemented so far
+    
     global pool
     global key_pool
     
@@ -336,8 +335,7 @@ def main():
             title = f"{desired_title} #{index}.txt"
             with open(result_path + "/" + title, 'w') as file:
                 file.write(quiz.to_string(title))
+        
     
-    print("Quiz generation complete!")
-    input("Press Enter to exit")
 if __name__ == "__main__":
     main()
