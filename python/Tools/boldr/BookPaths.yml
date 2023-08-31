@@ -1,0 +1,27 @@
+Matthew:
+    Path: "../../../resources/text/Matthew/"
+    Chapters: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28]
+
+1Thessalonians:
+    Path: "../../../resources/text/1Thessalonians/"
+    Chapters: [1, 2, 3, 4, 5]
+
+2Thessalonians:
+    Path: "../../../resources/text/2Thessalonians/"
+    Chapters: [1, 2, 3]
+
+1Timothy:
+    Path: "../../../resources/text/1Timothy/"
+    Chapters: [1, 2, 3, 4, 5, 6]
+
+2Timothy:
+    Path: "../../../resources/text/2Timothy/"
+    Chapters: [1, 2, 3, 4]
+    
+Titus:
+    Path: "../../../resources/text/Titus/"
+    Chapters: [1, 2, 3]
+    
+Philemon:
+    Path: "../../../resources/text/Philemon/"
+    Chapters: [1]
