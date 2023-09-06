@@ -66,12 +66,12 @@ def main(arg_material, arg_result_path, arg_title):
         ok_books = parse_yaml().keys()
         
         # Remove spaces, split by commas
-        specified_material = specified_material.translate(' ', '')
+        specified_material = specified_material.translate({' ':''})
         book_list = specified_material.split(',')
         
         for book in book_list:
             if book in ok_books:
-                final_book_list = final_book_list + book
+                final_book_list.append(book)
             else:
                 raise IndexError(f"Book {book} not found in material library.")
         
@@ -141,21 +141,20 @@ def main(arg_material, arg_result_path, arg_title):
     
     # CODE =======================================================================
     # Section 1: Prep ----------------
-    args = parser.parse_args()
-    book_list = parse_books(args.arg_material)
+    book_list = parse_books(arg_material)
     # By the end of this section, need to have the material in one giant string
     material_lookup = parse_yaml()
     material_string = ""
     
     for book in book_list:
-        material_lookup = material_lookup + header_word(book, 2) + '\n'
+        material_string = material_string + header_word(book, 2) + '\n'
         for chapter in material_lookup[book]['Chapters']:
             
             filename = f"{chapter}.chapter"
             absolute_path = os.path.dirname(__file__)
             book_path = os.path.join(os.path.join(absolute_path, material_lookup[book]["Path"]), filename)
             
-            with open(book_path, 'r') as file:
+            with open(book_path, 'r', encoding="utf8") as file:
                 material_string = material_string + header_word(f"Chapter {chapter}", 3) + '\n'
                 material_string = material_string + file.read()
     
@@ -232,12 +231,12 @@ if __name__ == "__main__":
                                     description="Given a set of NT books, generates an .html file with all unique words bolded.",
                                     epilog="Requires --material to be specified as a string")
    
-   parser.add_argument("--material", action="store_const", const="arg_material",
+   parser.add_argument("--material",
                        help="String of NT books to use as material", required=True)
-   parser.add_argument("--result_path", action="store_const", const="arg_result_path",
+   parser.add_argument("--result_path",
                        help="Relative or absolute location to place results file")
-   parser.add_argument("--title", action="store_const", const="arg_title",
+   parser.add_argument("--title",
                        help="Title of .html file")
    options = parser.parse_args()
-   print(options)
-   #main(arg_material, arg_result_path, arg_title)
+   #print(options)
+   main(options.material, options.result_path, options.title)
