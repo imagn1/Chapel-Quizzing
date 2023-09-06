@@ -84,6 +84,66 @@ def parse_books(specified_material):
     return final_book_list
 
 
+def bold_word(word):
+    """
+        Accepts: word - a string to be bolded with html tags
+        Returns: tagged - same word surrounded by html bold tags
+    """
+    tagged = f"<b>{word}</b>"
+    return tagged
+
+
+def header_word(word, level=2):
+    """
+        Accepts: word - a string to be made a header with html tags
+                level - an int of the header level desired, 1-6
+        Returns: tagged - same string surrounded by html header tags
+    """
+    tagged = f"<h{level}>{word}</h{level}>"
+    return tagged
+
+
+def split_and_count_words(book):
+    """
+        Accepts: book - "A long string of text"
+        
+        Returns: occurences_dict - a lowercase dictionary of every word
+        that appears in the book, with values matching the number of occurences
+    """
+    
+    word = re.compile(r"\b[a-z\-]+\b", flags=re.IGNORECASE)
+    words_in_book = re.findall(word, book)
+    occurences_dict = {}
+    
+    for occurence in words_in_book:
+        if occurence.lower() not in occurences_dict.keys():
+            occurences_dict[occurence.lower()] = 1
+        else:
+            occurences_dict[occurence.lower()] = occurences_dict[occurence.lower()] + 1
+    
+    return occurences_dict
+
+
+def bold_every_unique_word(book, occurences_dict):
+    """
+        Accepts: book - "A long string of text"
+                occurences_dict - a lowercase dictionary of every word
+                that appears in the book, with values matching the number
+                of occurences
+        
+        Returns: bolded_book - A copy of the original book that has every
+                unique word bolded with html bold tags
+    """
+    bolded_book = book
+    
+    for occurence in occurences_dict.keys():
+        if occurences_dict[occurence] == 1:
+            word = re.compile(rf"(\b{occurence}\b)", flags=re.IGNORECASE)
+            temp_book = re.split(word, bolded_book)
+            bolded_book = temp_book[0] + bold_word(temp_book[1]) + temp_book[2]
+    
+    return bolded_book
+
 
 
 # CODE =======================================================================
