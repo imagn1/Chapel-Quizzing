@@ -129,11 +129,15 @@ def main(arg_material, arg_result_path, arg_title):
                     unique word bolded with html bold tags
         """
         bolded_book = book
+        #print(bolded_book)
+        # print(occurences_dict)
         
         for occurence in occurences_dict.keys():
             if occurences_dict[occurence] == 1:
-                word = re.compile(rf"(\b{occurence}\b)", flags=re.IGNORECASE)
-                temp_book = re.split(word, bolded_book)
+                word = re.compile(rf"(\b{occurence}\b)(?![\w-])", flags=re.IGNORECASE)
+                #print(word)
+                temp_book = re.split(word, bolded_book, maxsplit=1)
+                #print(temp_book)
                 bolded_book = temp_book[0] + bold_word(temp_book[1]) + temp_book[2]
         
         return bolded_book
@@ -158,11 +162,21 @@ def main(arg_material, arg_result_path, arg_title):
                 material_string = material_string + header_word(f"Chapter {chapter}", 3) + '\n'
                 material_string = material_string + file.read()
     
-    print(material_string)
-# Section 2: Process -------------
+    #print(material_string)
+    # Section 2: Process -------------
+    occurences_dict = split_and_count_words(material_string)
+    bolded_string = bold_every_unique_word(material_string, occurences_dict)
 
-
-# Section 3: Generate Output -----
+    # Section 3: Generate Output -----
+    bolded_string = bolded_string.translate({'\n': "<br>"})
+    html_string = f"<html><h1>{arg_title}</h1>" + bolded_string + "</html>"
+    
+    absolute_path = os.path.dirname(__file__)
+    final_write_path = os.path.join(absolute_path, f"./{arg_result_path}/{arg_title}.html")
+    
+    with open(final_write_path, 'x') as file:
+        file.write(html_string)
+    
 
 def parse_config():
     """

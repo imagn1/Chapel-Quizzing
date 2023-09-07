@@ -1,4 +1,4 @@
 # Used by default if no arguments are supplied to boldr.py
-material: "Titus"
-result_path: "default_path"
-title: "default_title"
+material: "Titus,Philemon"
+result_path: "./results"
+title: "default_title2"
