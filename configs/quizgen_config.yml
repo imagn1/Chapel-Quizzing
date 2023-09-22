@@ -1,5 +1,5 @@
 Paths:
-    QuestionsCSV: "path goes here"
+    QuestionsCSV: "C:\repos\chapel_quizzing\resources\questions\2023-24_practice_session.csv"
     KeyVersesCSV: "path goes here"
     ResultsDirectory: "path goes here"
 NumberToGenerate: 1
