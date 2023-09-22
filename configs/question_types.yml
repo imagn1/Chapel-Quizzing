@@ -23,3 +23,15 @@ Question Types:
         abbrv: "MA"
         is_key_only: False
         description: "Like INT, but expects some sort of list or pair of answers"
+    
+    CR:
+        name: "Chapter Reference"
+        abbrv: "CR"
+        is_key_only: False
+        description: "INT questions that are more difficult/cryptic, also gives players the chapter reference in addition to the question"
+    
+    CRMA:
+        name: "Chapter Reference Multiple Answer"
+        abbrv: "CRMA"
+        is_key_only: False
+        description: "Like CR, but for multiple answers"
