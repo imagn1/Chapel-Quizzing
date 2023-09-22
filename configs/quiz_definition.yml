@@ -4,9 +4,11 @@ Quiz:
         # Distribution should match question types listed in question_types,
         # Besides default question. Numbers below should sum <= 1.0
         Distribution:
-            QT: 0.2
-            FTV: 0.2
-            MA: 0.2
+            QT: 0.1
+            FTV: 0.1
+            MA: 0.1
+            CR: 0.1
+            CRMA: 0.05
         # Ratio key should be <= 1.0, set to -1 if you don't wish to control for key verses
         RatioKey: 0.5
     
