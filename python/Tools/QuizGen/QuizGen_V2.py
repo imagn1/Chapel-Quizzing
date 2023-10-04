@@ -280,10 +280,10 @@ def create_verse(book, reference):
     assert ':' in reference, f"Invalid reference {book} {reference}"
     reference = reference.split(':')
     if '-' in reference[-1]:
-        reference = reference.split('-')
+        reference = reference[-1].split('-')
         # Multiple references identified. Need to create multiple verses
         for item in reference[1:]:
-            verses = verses + Verse(book, reference[0], item)
+            verses = verses.append(Verse(book, reference[0], item))
     else:
         verses = [Verse(book, reference[0], reference[1])]
     return verses
