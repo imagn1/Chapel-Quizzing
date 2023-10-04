@@ -23,11 +23,6 @@ import sys
 import yaml
 
 # Constants ==================================================================
-accepted_types = ["QT","FTV","INT","MA"]
-default_type_dist = {"QT":(1,2), "FTV":(1,2), "MA":(1,2)}
-default_num_questions = 20
-default_num_backup = 5
-default_ratio_key = 0.5
 
 # Configurations +============================================================
 absolute_path = os.path.dirname(__file__)
@@ -48,9 +43,20 @@ with open(question_types_path, 'r') as file:
 
 
 # Class definitions ==========================================================
+class Verse:
+    def __init__(self, book, chapter, verse):
+        self.book = book
+        self.chapter = chapter
+        self.verse = verse
+        
+    def to_string(self):
+        buildup = "" + self.book + " " + self.chapter + ":" + self.verse
+        return buildup
+
+
 class Question:
     
-    def __init__(self, book, _type, reference, prompt, answer):
+    def __init__(self, book, reference, _type, prompt, answer):
         self.book = book
         self._type = _type
         self.reference = reference
@@ -61,49 +67,64 @@ class Question:
         buildup = "" + self.book + "," + self._type + "," + self.reference + "," + self.prompt + "," + self.answer
         return buildup
 
+
 class Quiz:
       
     global debug
     
-    default_num_questions = quiz_definition["Quiz"]["Questions"]["Number"]
-    default_ratio_key = quiz_definition["Quiz"]["Questions"]["RatioKey"]
-    default_num_backup = quiz_definition["Quiz"]["Backups"]["Number"]
-    default_type_dist = quiz_definition["Quiz"]["Questions"]["Distribution"]
-    
     def __init__(self):
-        num_questions = default_num_questions
-        ratio_key = default_ratio_key
-        num_backup = default_num_backup
-        ratio_types = default_type_dist
+        self.default_num_questions = quiz_definition["Quiz"]["Questions"]["Number"]
+        self.default_ratio_key = quiz_definition["Quiz"]["Questions"]["RatioKey"]
+        self.default_num_backup = quiz_definition["Quiz"]["Backups"]["Number"]
+        self.default_type_dist = quiz_definition["Quiz"]["Questions"]["Distribution"]
+        self.default_qtype = quiz_definition["Quiz"]["Questions"]["Default"]
+        
+        # These probably shouldn't be done this way, but I'm lazily taking
+        # advantage of the old way I did it.
+        num_questions = self.default_num_questions
+        ratio_key = self.default_ratio_key
+        num_backup = self.default_num_backup
+        ratio_types = self.default_type_dist
+        default_qtype_use = self.default_qtype
         
         question_set = []
         backup_question_set = []
         num_types = {}
-        non_ints = 0
         
-        # Determine the number of each question you need
-        for key,value in ratio_types.items():
-            print(f"{key}: {value} ratio")
-            upper = value[1] + 1
-            lower = value[0]
-            num_types[key] = random.randrange(lower,upper)
-            non_ints += num_types[key]
+        # Determine the number of each question types to use for this quiz
+        for qtype in ratio_types.keys():
+            poss_range = ratio_types[qtype].split(',')
+            # Assume poss_range =["min", "max"]
+            min_num = int(poss_range[0])
+            max_num = int(poss_range[1])
+            num_types[qtype] = random.randrange(min_num, max_num + 1)
         
-        # Fill in the rest with INTs
-        assert non_ints <= num_questions
-        num_types["INT"] = num_questions - non_ints
+        non_default_questions_count = sum(num_types.values())
+
+        # Fill in the rest with deafult questions
+        assert non_default_questions_count <= num_questions
+        num_types[default_qtype_use] = num_questions - non_default_questions_count
         
-        # Pull questions into the quiz
-        for q_type, quantity in num_types.items():
-            for i in range(quantity):
-                if q_type not in ["QT", "FTV"]:
+        # Now assume any leftover qtypes are zero
+        for qtype in question_types["Question Types"].keys():
+            if not qtype in num_types.keys():
+                num_types[qtype] = 0
+        
+        # Make a list of key question types
+        key_types = [smtg for smtg in ratio_types.keys() if question_types["Question Types"][smtg]["is_key_only"] == True]
+        
+        # Now actually pull questions into the quiz
+        for qtype, qty in num_types.items():
+            for i in range(qty):
+                if not qtype in key_types:
+                    # Generate as normal
                     if random.random() <= ratio_key:
                         # get key question
-                        question_set.append(get_key_question(q_type))
+                        question_set.append(get_key_question(qtype))
                     else:
-                        question_set.append(get_question(q_type))
-                else:  # For memory verses, they'll always be key 
-                    question_set.append(get_key_question(q_type))
+                        question_set.append(get_question(qtype))
+                else:  # Memory verses are always key
+                    question_set.append(get_key_question(qtype))
 
         assert len(question_set) == num_questions
         
@@ -150,6 +171,7 @@ class Quiz:
             buildup += "\n " + question.answer + "\n"
         return buildup
 
+
 # Function definitions =======================================================
 def readQuestionLibrary():
     """
@@ -169,17 +191,22 @@ def readQuestionLibrary():
             q_lib.append(row)
     return q_lib
 
+
 def readKeyList():
     """
     This function reads in a CSV file of key verses, and makes a list of them
-    Relies on the oath definition in quizgen_config.yml
+    Relies on the path definition in quizgen_config.yml
     
+    Assumed format of csv is book | verses
     Returns
     
     -------
-    key_verses : list of references
+    key_verses : list of Verse type key verses
 
     """
+    
+    
+    # WIP WIP WIP WIP WIP WIP WIP
     key_lib = []
     key_path = config["Paths"]["KeyVersesCSV"]
     assert os.path.exists(key_path), "Key verses file not found at, " + str(key_path)
@@ -188,6 +215,18 @@ def readKeyList():
         for row in csv_reader:
             key_lib.append(row)
     key_verses = []
+    for index, cell in key_lib:
+        if index != 0:
+            if ':' in cell:
+                cell = cell.split(':')
+                chapter = cell[0]
+                if '-' in cell:
+                    verses = cell.split('-')
+                    verses = range(int(verses[0]), int(verses[1]) + 1)
+                    for verse in verses:
+                        key_verses.append(Verse(key_lib[0], chapter, verse))
+                key_verses.append(Verse())
+    key_lib.append(row)
     for row in key_lib:
         for item in row:
             key_verses.append(item)
@@ -212,16 +251,17 @@ def gen_pools(q_lib, key_refs, book):
     pool = []
     key_pool = []
     # Assume first line is headers, and is in format:
-    # TYPE, REF, PROMPT, ANSWER
+    # BOOK, REF, TYPE, PROMPT, ANSWER
     q_lib = q_lib[1:]
     for line in q_lib:
         # create the question first
-        current_q = Question(book, line[0],line[1],line[2],line[3])
+        current_q = Question(line[0], line[1], line[2], line[3], line[4])
         if current_q.reference in key_refs:
             key_pool.append(current_q)
         else:
             pool.append(current_q)
     return pool, key_pool
+
 
 def get_key_question(q_type, pop=True):
     """

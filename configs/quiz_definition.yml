@@ -2,13 +2,16 @@ Quiz:
     Questions:
         Number: 20
         # Distribution should match question types listed in question_types,
-        # Besides default question. Numbers below should sum <= 1.0
+        # Besides default question. Numbers below should sum <= 20
         Distribution:
-            QT: 0.2
-            FTV: 0.2
-            MA: 0.2
+            QT: 1,2
+            FTV: 1,2
+            MA: 1,2
+            CR: 0,2
+            CRMA: 0,2
         # Ratio key should be <= 1.0, set to -1 if you don't wish to control for key verses
         RatioKey: 0.5
+        Default: "INT"
     
     Backups:
         Number: 10
