@@ -5,4 +5,4 @@ Paths:
     ResultsDirectory: "C:\\repos\\Chapel-Quizzing\\results"
 NumberToGenerate: 1
 # Will append ## to title
-Titles: "Sample Quiz"
+Titles: "Sample Quizzes"

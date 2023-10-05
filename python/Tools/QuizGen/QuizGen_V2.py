@@ -49,6 +49,14 @@ class Verse:
         self.chapter = chapter
         self.verse = verse
         
+    def __eq__(self, other): 
+        if not isinstance(other, Verse):
+            # don't attempt to compare against unrelated types
+            return NotImplemented
+
+        return (self.book == other.book) and (self.chapter == other.chapter)\
+            and (self.verse == other.verse)
+    
     def to_string(self):
         buildup = "" + self.book + " " + self.chapter + ":" + self.verse
         return buildup
@@ -64,15 +72,17 @@ class Question:
     # associated verses, or potentially span the border between chapters.
     
     def __init__(self, _type, prompt, answer, *verse):
-        self.verse = verse
+        
         self._type = _type
         self.prompt = prompt
         self.answer = answer
         
         if (len(verse) > 1):
+            self.verse = verse
             # Question is associated with multiple verses!
             self.is_multiple = True
         else:
+            self.verse = verse[0]
             self.is_multiple = False
 
     def to_string(self):
@@ -93,11 +103,15 @@ class Question:
                     + verses[0].verse + "-" + verses[-1].verse
             
         else:
+            # sample of what this looks like right now
+            # ([<__main__.Verse object at 0x000001F3FFABD0D0>],)
+            # Should have removed the tuple now.
             buildup = "" + self.verse[0].to_string()
         
         return (buildup + "," + self._type + "," + self.prompt + "," + self.answer)
     
     def get_verses(self):
+        print([item for item in self.verse])
         return [item for item in self.verse]
 
 
@@ -192,13 +206,17 @@ class Quiz:
         buildup += title + "\n"
         buildup += "-----------\n"
         for index, question in enumerate(self.question_set):
-            buildup += str(index + 1) + ". " + question.book + " " + question.reference
+            buildup += str(index + 1) + ". "
+            for item in question.get_verses():
+                buildup += item.to_string()
             buildup += "\n " + question._type
             buildup += "\n " + question.prompt
             buildup += "\n " + question.answer + "\n"
         buildup += "\nBackup Questions\n"
         for index, question in enumerate(self.backup_question_set):
-            buildup += str(index + 1) + ". " + question.book + " " + question.reference
+            buildup += str(index + 1) + ". "
+            for item in question.get_verses():
+                buildup += item.to_string()
             buildup += "\n " + question._type
             buildup += "\n " + question.prompt
             buildup += "\n " + question.answer + "\n"
@@ -311,14 +329,17 @@ def gen_pools(q_lib, key_refs):
     # Assume first line is headers, and is in format:
     # BOOK, REF, TYPE, PROMPT, ANSWER
     q_lib = q_lib[1:]
+    # print("Lines:")
+    print(key_refs)
     for line in q_lib:
         # create the question first
         # Need to determine reference!
+        #print(line)
         temp_verse = create_verse(line[0], line[1])
         current_q = Question(line[2], line[3], line[4], *[temp_verse])
-        #print(current_q.to_string())
-        print(key_refs)
-        if any([vs in key_refs for vs in current_q.get_verses()]):
+        # print(current_q.to_string())
+        # print(key_refs)
+        if any([vs == key_vs for key_vs in key_refs for vs in current_q.get_verses()]):
             key_pool.append(current_q)
         else:
             pool.append(current_q)
@@ -387,7 +408,7 @@ def string_to_html(text, title="Quiz"):
     -------
     html : A string with proper html tags, like the initial header and line br.
     """
-    html = text.translate({'\n': "<br>"})
+    html = text.translate({r'\n': "<br>"})
     html = f"<html><h1>{title}</h1>" + html + "</html>"
     return html
 
@@ -430,8 +451,10 @@ def main():
     if debug:
         for question in q_lib:
             print(question)
-        
-    print(key_verses)
+        print("Key verses found:")
+        for ref in key_verses:
+            print(ref.to_string())
+    
     pool, key_pool = gen_pools(q_lib, key_verses)
         
     # set params
