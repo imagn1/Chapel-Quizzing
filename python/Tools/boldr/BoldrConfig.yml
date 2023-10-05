@@ -1,0 +1,4 @@
+# Used by default if no arguments are supplied to boldr.py
+material: "1Thessalonians,2Thessalonians,1Timothy,2Timothy,Titus,Philemon"
+result_path: "./results"
+title: "2023-2024 Quizzing Material"
