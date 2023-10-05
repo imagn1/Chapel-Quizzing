@@ -250,20 +250,21 @@ def readKeyList():
     key_verses = []
     for row in key_lib:
         for index, reference in enumerate(row):
-            if index != 0:
-                # Returns a bunch of None's, but the following is kinda pretty.
-                [key_verses.append(item) for item in create_verse(row[0], reference)]
+            if (index != 0) and (bool(reference)):
+                temp_verse = create_verse(row[0], reference)
+                for item in temp_verse:
+                    key_verses.append(item)
     
     return key_verses
 
 
-def create_verse(book, chapter, verse):
-    """
-    Passed book, chapter, verse.
-    i.e. Hebrews, 1, 1
-    constructs a Verse object out of it and returns it.
-    """
-    return Verse(book, chapter, verse)
+# def create_verse(book, chapter, verse):
+#     """
+#     Passed book, chapter, verse.
+#     i.e. Hebrews, 1, 1
+#     constructs a Verse object out of it and returns it.
+#     """
+#     return Verse(book, chapter, verse)
 
 
 def create_verse(book, reference):
@@ -279,13 +280,15 @@ def create_verse(book, reference):
     
     assert ':' in reference, f"Invalid reference {book} {reference}"
     reference = reference.split(':')
+    chapter = reference[0]
     if '-' in reference[-1]:
-        reference = reference[-1].split('-')
+        multiple_verses = reference[-1].split('-')
         # Multiple references identified. Need to create multiple verses
-        for item in reference[1:]:
-            verses = verses.append(Verse(book, reference[0], item))
+        for item in range(int(multiple_verses[0]), int(multiple_verses[1]) + 1):
+            verses.append(Verse(book, chapter, str(item)))
     else:
-        verses = [Verse(book, reference[0], reference[1])]
+        verses = [Verse(book, chapter, reference[1])]
+    
     return verses
 
 
@@ -409,9 +412,9 @@ def main():
         debug = False
 
     q_lib = readQuestionLibrary()
-    print("File read succesfully")
+    print("Questions file read succesfully")
     key_verses = readKeyList()
-    print("File read succesfully")
+    print("Key verses file read succesfully")
     result_path = config["Paths"]["ResultsDirectory"]
     
     global pool

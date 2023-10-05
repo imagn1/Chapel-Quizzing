@@ -1,5 +1,5 @@
 Paths:
-    # Recommend to use forward slashes wherever possible, TODO
+    # Recommend to use forward slashes wherever possible, or double backslashes. TODO
     QuestionsCSV: "C:\\repos\\Chapel-Quizzing\\resources\\questions\\2023-24-practice-session-questions.csv"
     KeyVersesCSV: "C:\\repos\\Chapel-Quizzing\\resources\\verses\\2023-24-Memory-Verses.csv"
     ResultsDirectory: "C:\\repos\\Chapel-Quizzing\\results"
