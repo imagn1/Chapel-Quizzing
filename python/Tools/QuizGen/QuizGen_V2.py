@@ -408,8 +408,8 @@ def string_to_html(text, title="Quiz"):
     -------
     html : A string with proper html tags, like the initial header and line br.
     """
-    html = text.translate({r'\n': "<br>"})
-    html = f"<html><h1>{title}</h1>" + html + "</html>"
+    text = text.replace('\n',"<br>")
+    html = f"<html><h1>{title}</h1>" + text + "</html>"
     return html
 
 
@@ -477,7 +477,8 @@ def main():
             print(quiz.to_string(f"{desired_title} #{index}"))
         else:
             desired_title = f"{desired_title} #{index}"
-            html = string_to_html(quiz.to_string(desired_title))
+            text = quiz.to_string(desired_title)
+            html = string_to_html(text)
             title = f"{desired_title}.html"
             with open(result_path + "/" + title, 'x') as file:
                 file.write(html)
