@@ -254,7 +254,7 @@ def readKeyList():
                 temp_verse = create_verse(row[0], reference)
                 for item in temp_verse:
                     key_verses.append(item)
-    
+    #print(key_verses)
     return key_verses
 
 
@@ -316,10 +316,16 @@ def gen_pools(q_lib, key_refs):
         # Need to determine reference!
         temp_verse = create_verse(line[0], line[1])
         current_q = Question(line[2], line[3], line[4], *[temp_verse])
+        #print(current_q.to_string())
+        print(key_refs)
         if any([vs in key_refs for vs in current_q.get_verses()]):
             key_pool.append(current_q)
         else:
             pool.append(current_q)
+    print("Num of key questions found: ")
+    print(len(key_pool))
+    print("Num of reg qs found: ")
+    print(len(pool))
     return pool, key_pool
 
 
@@ -425,6 +431,7 @@ def main():
         for question in q_lib:
             print(question)
         
+    print(key_verses)
     pool, key_pool = gen_pools(q_lib, key_verses)
         
     # set params
