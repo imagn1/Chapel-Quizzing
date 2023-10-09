@@ -131,23 +131,24 @@ class Quiz:
       
     global debug
     
-    def __init__(self):
-        self.default_num_questions = quiz_definition["Quiz"]["Questions"]["Number"]
-        self.default_ratio_key = quiz_definition["Quiz"]["Questions"]["RatioKey"]
-        self.default_num_backup = quiz_definition["Quiz"]["Backups"]["Number"]
-        self.default_type_dist = quiz_definition["Quiz"]["Questions"]["Distribution"]
-        self.default_qtype = quiz_definition["Quiz"]["Questions"]["Default"]
+    def __init__(self, default_num_questions=quiz_definition["Quiz"]["Questions"]["Number"],
+                 default_ratio_key=quiz_definition["Quiz"]["Questions"]["RatioKey"],
+                 default_type_dist=quiz_definition["Quiz"]["Questions"]["Distribution"],
+                 default_qtype=quiz_definition["Quiz"]["Questions"]["Default"]):
+        
+        self.default_num_questions = default_num_questions
+        self.default_ratio_key = default_ratio_key
+        self.default_type_dist = default_type_dist
+        self.default_qtype = default_qtype
         
         # These probably shouldn't be done this way, but I'm lazily taking
         # advantage of the old way I did it.
         num_questions = self.default_num_questions
         ratio_key = self.default_ratio_key
-        num_backup = self.default_num_backup
         ratio_types = self.default_type_dist
         default_qtype_use = self.default_qtype
         
         question_set = []
-        backup_question_set = []
         num_types = {}
         
         # Determine the number of each question types to use for this quiz
@@ -187,31 +188,9 @@ class Quiz:
 
         assert len(question_set) == num_questions
         
-        # Now do the backup questions
-        # There's some decision to be made here. How should backup questions
-        # be distributed? Should they remove themselves from the pool?
-        # I'm deciding that we generate 2 backup Q's of each non-int type,
-        # and the specified number of INT backups. Also they won't pop.
-        if num_backup > 0:
-            for key, value in num_types.items():
-                # Debug
-                if debug:
-                    print(f"Backup {key}")
-                if key != "INT":
-                    if key not in ["QT", "FTV"]:
-                        for i in range(2):
-                            backup_question_set.append(get_question(key, False))
-                    else:
-                        for i in range(2):
-                            backup_question_set.append(get_key_question(key, False))
-                else:
-                    for i in range(num_backup):
-                        backup_question_set.append(get_question(key, False))
-        
         # Shuffle the quiz
         random.shuffle(question_set)
         self.question_set = question_set
-        self.backup_question_set = backup_question_set
         
     def to_string(self, title="Quiz"):
         buildup = "-----------\n"
@@ -481,6 +460,12 @@ def main():
     for i in range(num_quizzes):
         quizzes.append(Quiz())
     
+    # if desired, generate backup question set
+    if (quiz_definition["Backup Questions"]["Enabled"]):
+        backup_questions = Quiz(quiz_definition["Backup Questions"]["Number"],
+                      quiz_definition["Backup Questions"]["RatioKey"],
+                      quiz_definition["Backup Questions"]["Distribution"])
+    
     # spit out results
     for index, quiz in enumerate(quizzes):
         index = index + 1
@@ -488,13 +473,17 @@ def main():
             # TODO implement titles later, console output only
             print(quiz.to_string(f"{desired_title} #{index}"))
         else:
-            desired_title = f"{desired_title} #{index}"
-            text = quiz.to_string(desired_title)
+            text = quiz.to_string(f"{desired_title} #{index}")
             html = string_to_html(text)
-            title = f"{desired_title}.html"
+            title = f"{desired_title} #{index}.html"
             with open(result_path + "/" + title, 'x') as file:
                 file.write(html)
-        
     
+    # Now write backup questions if enabled
+    if (quiz_definition["Backup Questions"]["Enabled"]):
+        html = backup_questions.to_string(title=f"{desired_title} Backups")
+        with open(f"{result_path}/{desired_title} Backups.html", 'x') as file:
+            file.write(html)
+        
 if __name__ == "__main__":
     main()
