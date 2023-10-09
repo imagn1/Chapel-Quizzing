@@ -6,14 +6,8 @@ Created on Thu Oct 27 16:34:42 2022
 
 Purpose:
     To be a terminal based program that allows the user to read in a .csv file
-    of quizzing questions, to tweak parameters, and then generate a set of .txt
+    of quizzing questions, to tweak parameters, and then generate a set of .html
     quizzes based on those parameters.
-    Goals:
-        -Flexible number of quizzes
-        -Ability to specify range of chapters/verses
-        -Ability to name set of quizzes
-        -Flexible ratio of key questions (default 50%)
-        -
 """
 # Imports ====================================================================
 import csv
@@ -22,6 +16,7 @@ import os
 import sys
 import yaml
 
+from datetime import datetime
 # Constants ==================================================================
 
 # Configurations +============================================================
@@ -193,8 +188,7 @@ class Quiz:
         self.question_set = question_set
         
     def to_string(self):
-        
-        buildup = "-----------\n"
+        buildup = ""
         for index, question in enumerate(self.question_set):
             buildup += str(index + 1) + ". "
             for item in question.get_verses():
@@ -391,8 +385,26 @@ def string_to_html(text, title="Quiz"):
     html : A string with proper html tags, like the initial header and line br.
     """
     text = text.replace('\n',"<br>")
-    html = f"<html><h1>{title}</h1>" + text + "</html>"
+    html = r"""<html><head><style>
+    h1 {text-align: center;}
+    h3 {text-align: right;}
+    p {text-align: left;}
+    div {text-align: center;}
+    </style>
+    </head><h1>""" + \
+    f"{title}</h1>" + \
+    f"<h3>{get_timestamp()}</h3>" + \
+    text + "</html>"
     return html
+
+
+def get_timestamp():
+    """
+    Returns a timestamp.
+    """
+    now = datetime.now()
+    dt_string = now.strftime("%m/%d/%Y %H:%M:%S")
+    return dt_string
 
 
 # Main =======================================================================
@@ -408,7 +420,7 @@ def main():
           ====================================================================
           
                                           QuizGen
-                                           v2.0
+                                           v2.1
                                     by Isaiah Magnuson
                                     
           ====================================================================
