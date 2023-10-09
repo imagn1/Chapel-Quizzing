@@ -192,19 +192,10 @@ class Quiz:
         random.shuffle(question_set)
         self.question_set = question_set
         
-    def to_string(self, title="Quiz"):
+    def to_string(self):
+        
         buildup = "-----------\n"
-        buildup += title + "\n"
-        buildup += "-----------\n"
         for index, question in enumerate(self.question_set):
-            buildup += str(index + 1) + ". "
-            for item in question.get_verses():
-                buildup += item.to_string()
-            buildup += "\n " + question._type
-            buildup += "\n " + question.prompt
-            buildup += "\n " + question.answer + "\n"
-        buildup += "\nBackup Questions\n"
-        for index, question in enumerate(self.backup_question_set):
             buildup += str(index + 1) + ". "
             for item in question.get_verses():
                 buildup += item.to_string()
@@ -473,15 +464,16 @@ def main():
             # TODO implement titles later, console output only
             print(quiz.to_string(f"{desired_title} #{index}"))
         else:
-            text = quiz.to_string(f"{desired_title} #{index}")
-            html = string_to_html(text)
+            text = quiz.to_string()
+            html = string_to_html(text, title=f"{desired_title} #{index}")
             title = f"{desired_title} #{index}.html"
             with open(result_path + "/" + title, 'x') as file:
                 file.write(html)
     
     # Now write backup questions if enabled
     if (quiz_definition["Backup Questions"]["Enabled"]):
-        html = backup_questions.to_string(title=f"{desired_title} Backups")
+        text = backup_questions.to_string()
+        html = string_to_html(text, title=f"{desired_title} Backups")
         with open(f"{result_path}/{desired_title} Backups.html", 'x') as file:
             file.write(html)
         
