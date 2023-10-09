@@ -345,7 +345,7 @@ def get_key_question(q_type, pop=True):
                 key_pool.remove(question)
             return question
     else:
-        print("Ran out of key questions. Substitute regular questions?")
+        print(f"Ran out of key {q_type} questions. Substitute regular questions?")
         response = input("y/n:")
         if response.lower() == 'y':
             return (get_question(q_type, pop))

@@ -18,8 +18,8 @@ Backup Questions:
     Enabled: True
     Number: 20
     Distribution:
-        QT: 2,4
-        FTV: 2,4
+        QT: 0,0
+        FTV: 0,0
         MA: 2,4
         CR: 2,4
     # If Quiz RatioKey above is -1, this needs to be -1 too.
