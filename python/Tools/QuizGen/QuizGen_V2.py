@@ -73,7 +73,13 @@ class Question:
     
     def __init__(self, _type, prompt, answer, *verse):
         
-        self._type = _type
+        # Custom rule, combine CR and CRMAs into one category
+        if (_type == "CRMA"):
+            self._type = "CR"
+            self.is_crma = True
+        else:
+            self.is_crma = True
+            self._type = _type
         self.prompt = prompt
         self.answer = answer
         
@@ -108,7 +114,13 @@ class Question:
             # Should have removed the tuple now.
             buildup = "" + self.verse[0].to_string()
         
-        return (buildup + "," + self._type + "," + self.prompt + "," + self.answer)
+        # Due to combination of CRs and CRMAs above, we need to preserve the
+        # CRMA types. This allows us to specify a range of CRs, but really get
+        # some random combination of CRs and CRMAs.
+        if (self.is_crma):
+            return (buildup + ",CRMA" + "," + self.prompt + "," + self.answer)
+        else:
+            return (buildup + "," + self._type + "," + self.prompt + "," + self.answer)
     
     def get_verses(self):
         print([item for item in self.verse])
