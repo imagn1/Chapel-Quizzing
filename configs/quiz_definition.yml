@@ -1,0 +1,27 @@
+Quiz:
+    Questions:
+        Number: 20
+        # Distribution should match question types listed in question_types,
+        # Besides default question. Numbers below should sum <= 20
+        Distribution:
+            QT: 1,2
+            FTV: 1,2
+            MA: 1,2
+            CR: 0,3
+        # Ratio key should be <= 1.0, set to -1 if you don't wish to control for key verses
+        RatioKey: 0.5
+        Default: "INT"
+    
+# All the same rules apply for a backup question list.
+Backup Questions:
+    # Set to True if you want a list of backup questions generated
+    Enabled: True
+    Number: 20
+    Distribution:
+        QT: 0,0
+        FTV: 0,0
+        MA: 2,4
+        CR: 2,4
+    # If Quiz RatioKey above is -1, this needs to be -1 too.
+    RatioKey: -1
+    
