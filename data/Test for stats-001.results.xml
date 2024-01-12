@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<members>
+  <results>
+    <match id="1" round="1" room="1">
+      <team id="3" score="20" errors="3" place="3"/>
+      <team id="4" score="90" errors="1" place="2"/>
+      <team id="5" score="230" errors="1" place="1"/>
+      <quizzer id="1" score="0" errors="0"/>
+      <quizzer id="2" score="0" errors="0"/>
+      <quizzer id="11" score="-20" errors="3"/>
+      <quizzer id="13" score="20" errors="0"/>
+      <quizzer id="3" score="40" errors="1"/>
+      <quizzer id="10" score="20" errors="0"/>
+      <quizzer id="12" score="0" errors="0"/>
+      <quizzer id="4" score="90" errors="0"/>
+      <quizzer id="6" score="20" errors="0"/>
+      <quizzer id="8" score="80" errors="1"/>
+    </match>
+    <match id="5" round="2" room="1">
+      <team id="3" score="220" errors="1" place="1"/>
+      <team id="4" score="40" errors="3" place="2"/>
+      <team id="-1" score="10" errors="4" place="3"/>
+      <quizzer id="1" score="40" errors="0"/>
+      <quizzer id="2" score="20" errors="1"/>
+      <quizzer id="11" score="90" errors="0"/>
+      <quizzer id="13" score="20" errors="0"/>
+      <quizzer id="3" score="-10" errors="2"/>
+      <quizzer id="10" score="20" errors="1"/>
+      <quizzer id="12" score="20" errors="0"/>
+      <quizzer id="5" score="20" errors="1"/>
+      <quizzer id="7" score="0" errors="0"/>
+      <quizzer id="9" score="-20" errors="3"/>
+    </match>
+    <match id="9" round="3" room="1">
+      <team id="3" score="130" errors="1" place="2"/>
+      <team id="5" score="120" errors="2" place="3"/>
+      <team id="-1" score="160" errors="0" place="1"/>
+      <quizzer id="1" score="40" errors="0"/>
+      <quizzer id="2" score="0" errors="0"/>
+      <quizzer id="11" score="40" errors="0"/>
+      <quizzer id="13" score="20" errors="1"/>
+      <quizzer id="4" score="90" errors="0"/>
+      <quizzer id="6" score="20" errors="0"/>
+      <quizzer id="8" score="-10" errors="2"/>
+      <quizzer id="5" score="0" errors="0"/>
+      <quizzer id="7" score="90" errors="0"/>
+      <quizzer id="9" score="40" errors="0"/>
+    </match>
+  </results>
+</members>

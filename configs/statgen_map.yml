@@ -1,0 +1,24 @@
+# Name of .xml file (in head/data/ directory) to process with StatGen.py:
+Filename: "Test for stats-001.results.xml"
+Title: "stats_test"
+# Team id maps. Currently I don't know how these are determined. So they must be filled in manually to match the .xml file. Should ask ACME about that at some point.
+Teams:
+    3: "NGC1"
+    4: "NGC2"
+    5: "TDBC1"
+    -1: "TDBC2"
+# Player id maps. These are alphabetic by last name. The list is in NextGen's tournament setup page.
+Players:
+    1: "Aaa, Aaa"
+    2: "Brier, Matilda"
+    3: "Brier, Parsley"
+    4: "Brooks, Otto"
+    5: "Hudson, Magoo"
+    6: "Jayson, Kay"
+    7: "Larson, Greg"
+    8: "Last Name, Isaiah"
+    9: "Lips, Ruby"
+    10: "N'Onions, Pickles"
+    11: "Oats, Barley"
+    12: "Pippins, Petunia"
+    13: "Smith, Sammie"
