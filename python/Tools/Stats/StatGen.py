@@ -77,7 +77,7 @@ class Player:
         self.matches_played += 1
         
     def to_string(self):
-        return f"\n{self.id_ref}.{self.name}. Pts:{self.score}. Errs:{self.errors}. Pts/Match:{self.score/self.matches_played}."
+        return f"\n{self.id_ref}.{self.name}. Pts:{self.score}. Errs:{self.errors}. Pts/Match:{round(self.score/self.matches_played, 2)}."
 
 
 class Team:
@@ -102,7 +102,7 @@ class Team:
         self.matches_played += 1
         
     def to_string(self):
-        return f"\n{self.id_ref}.{self.name}. Match Points:{self.match_points}. Total Pts:{self.score}. Total Errs:{self.errors}. Pts/Match:{self.score/self.matches_played}."
+        return f"\n{self.id_ref}.{self.name}. Match Points:{self.match_points}. Total Pts:{self.score}. Total Errs:{self.errors}. Pts/Match:{round(self.score/self.matches_played, 2)}."
 
 
 # Setup ======================================================================
